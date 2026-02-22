@@ -46,6 +46,15 @@ def ackley(x):
     sum_cos = np.sum(np.cos(c * x)) / n
     return -a * np.exp(-b * np.sqrt(sum_sq)) - np.exp(sum_cos) + a + np.e
 
+def schwefel(x):
+    """
+    Schwefel funkcija: f(x) = 418.9829·n - Σ xᵢ·sin(√|xᵢ|)
+    Minimum: f(420.9687, ...) ≈ 0
+    Karakteristike: globalni minimum daleko od lokalnih minimuma – podmukla
+    """
+    n = len(x)
+    return 418.9829 * n - np.sum(x * np.sin(np.sqrt(np.abs(x))))
+
 
 BENCHMARKS = {
     "Sphere":     {"f": sphere,     "x_opt": lambda n: np.zeros(n), "domain": (-5, 5), "tol": 1e-6},
@@ -53,10 +62,9 @@ BENCHMARKS = {
     "Rastrigin":  {"f": rastrigin,  "x_opt": lambda n: np.zeros(n), "domain": (-5.12, 5.12), "tol": 1e-4},
     "Rosenbrock": {"f": rosenbrock, "x_opt": lambda n: np.ones(n),  "domain": (-2, 2), "tol": 1e-4},
     "Ackley":     {"f": ackley,     "x_opt": lambda n: np.zeros(n), "domain": (-32, 32),  "tol": 1e-4},
+    "Schwefel":   {"f": schwefel,   "x_opt": lambda n: np.full(n, 420.9687), "domain": (-500, 500), "tol": 1e-2},
 }
 
-
-"""Vraća benchmark funkciju po imenu."""    
 def get_function(name):
     if name not in BENCHMARKS:
         raise ValueError(f"Nepoznata funkcija '{name}'. Dostupne: {list(BENCHMARKS.keys())}")
